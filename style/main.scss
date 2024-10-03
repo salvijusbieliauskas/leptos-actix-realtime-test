@@ -64,10 +64,20 @@ p, h1, h2, h3 {
 	grid-auto-rows: min-content;
 }
 
+.grid-element-parent {
+	background: conic-gradient(
+		rgba(0, 0, 0, 0.7) var(--time-left),
+		rgba(0, 0, 0, 0.1) var(--time-left));
+		border-radius: 30%;
+		padding: 0;
+		margin: 0;
+		aspect-ratio: 1 / 1;
+		width: 100%;
+}
+
 .gridelement {
 	aspect-ratio : 1 / 1;
     width: 100%;
-    border: 1px solid transparent;
     border-radius: 30%;
     padding: 0;
     margin: 0;
@@ -75,6 +85,8 @@ p, h1, h2, h3 {
     justify-content:center;
     align-items: center;
     font-size: 5vw;
+	z-index: -1;
+	position:relative;
 }
 
 .header-container {

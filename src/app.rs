@@ -51,6 +51,8 @@ const TIMEOUT_MS : u64 = 2000;
 const CHECK_TIMEOUT_EVERY_MS : u128 = 4000;
 const PING_INTERVAL : i32 = 35;//was 200
 const NOT_REGISTERED_ERROR : &str = "owwwo you dwo nwot hwave an acwount :3";
+const ATTACK_COOLDOWN_MS : u32 = 5000;
+const ATTACK_COOLDOWN_ERR_MARGIN_MS : u32 = 200;
 
 
 #[server]
@@ -242,24 +244,31 @@ fn HomePage() -> impl IntoView {
         interval_closure.forget();
     });
 
-    // create_effect(move |_| {
-    //     spawn_local(async move {
-    //         // if user_requested {
-    //         //     return;
-    //         // }
-    //         // user_requested = true;
-    //         // let client = match register_user().await {
-    //         //     Ok(client) => client,
-    //         //     // Err(_) => {user_requested = false; return;},
-    //         //     Err(_) => {return;},
-    //         // };
-    //         //register user here
+    let mut cooldown_timer : i32 = 0;
 
-    //         // set_client.update(|value| *value = Some(client));
-    //         // user_requested = false;
+    let tick_cooldown = move || {
+        let parents = document().get_elements_by_class_name("grid-element-parent");
 
-    //     });
-    // });
+        for x in 0..parents.length() {
+            let mut element = parents.item(x);
+            if element.is_none() {
+                continue;
+            }
+            let mut element = element.unwrap();
+            element.set_attribute("style", "")
+        }
+    };
+
+    let cooldown_animation = move || {
+        let tick_cooldown = tick_cooldown.clone();
+        let window = window();
+        let interval_closure = Closure::wrap(Box::new(move || {
+            tick_cooldown();
+        }) as Box<dyn Fn()>);
+        let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(interval_closure.as_ref().unchecked_ref(),PING_INTERVAL);
+
+        interval_closure.forget();
+    };
 
     create_effect(move |_| {
         set_string_color.set(hue_to_hex(color.get()));
@@ -287,7 +296,9 @@ fn HomePage() -> impl IntoView {
                         children = move |peer : Client| {
                             let splits : Vec<String> = peer.name.split(" ").map(|strindge| String::from(strindge)).collect();
                             view! {
-                                <h1 class="gridelement" style = {move || "background-color:".to_owned()+&hue_to_hex(peer.color)+"!important"}>{&splits[0]}<br/>{&splits[1]}</h1>
+                                <div class="grid-element-parent">
+                                    <h1 class="gridelement" style = {move || "background-color:".to_owned()+&hue_to_hex(peer.color)+"!important"}>{&splits[0]}<br/>{&splits[1]}</h1>
+                                </div>
                             }
                         }
                         />
