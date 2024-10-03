@@ -255,7 +255,7 @@ fn HomePage() -> impl IntoView {
                 continue;
             }
             let mut element = element.unwrap();
-            element.set_attribute("style", "")
+            element.set_attribute("style", "");//https://stackoverflow.com/questions/67261754/skill-cooldown-animation-effect-similar-to-games-like-wow-in-css-js
         }
     };
 
