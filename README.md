@@ -1,6 +1,6 @@
 ﻿# leptos-actix-realtime-test
 
-A university project built to experiment with Rust web frameworks and their real-time rendering capabilities.
+A project built to experiment with Rust web frameworks and their real-time rendering capabilities.
 
 ## Features
 
