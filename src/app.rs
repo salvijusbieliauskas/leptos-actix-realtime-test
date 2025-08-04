@@ -45,7 +45,7 @@ impl ToString for GlobalState {
 
 static GLOBAL_STATE: LazyLock<Arc<Mutex<GlobalState>>> = LazyLock::new(|| Arc::new(Mutex::new(GlobalState {
     clients: Vec::new(),
-    last_updated: SystemTime::now().duration_since(UNIX_EPOCH).expect("Time travel was invented").as_millis() as u64,
+    last_updated: SystemTime::now().duration_since(UNIX_EPOCH).expect("Could not determine time since UNIX_EPOCH").as_millis() as u64,
 })));
 
 static LAST_CHECK: LazyLock<Arc<Mutex<u128>>> = LazyLock::new(|| Arc::new(Mutex::new(0)));
@@ -74,7 +74,7 @@ async fn fetch_global_state(uuid: String) -> Result<Option<GlobalState>, ServerF
     }
 
     let client = client_search_result.unwrap();
-    client.last_ping = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time travel was invented").as_millis() as u64;
+    client.last_ping = SystemTime::now().duration_since(UNIX_EPOCH).expect("Could not determine time since UNIX_EPOCH").as_millis() as u64;
     if client.last_updated == state.last_updated {
         return Ok(None);
     }
@@ -89,7 +89,7 @@ async fn register_user() -> Result<Client, ServerFnError> {
         name,
         // color : Color(1,1,1), 
         color: 0u16,
-        last_ping: SystemTime::now().duration_since(UNIX_EPOCH).expect("Time travel was invented").as_millis() as u64,
+        last_ping: SystemTime::now().duration_since(UNIX_EPOCH).expect("Could not determine time since UNIX_EPOCH").as_millis() as u64,
         uuid: uuid::Uuid::new_v4().to_string(),
         last_updated: 0,
     };
@@ -107,7 +107,7 @@ async fn update_color(uuid: String, color: u16) -> Result<(), ServerFnError> {
     }
 
     let client = client_search_result.unwrap();
-    client.last_ping = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time travel was invented").as_millis() as u64;
+    client.last_ping = SystemTime::now().duration_since(UNIX_EPOCH).expect("Could not determine time since UNIX_EPOCH").as_millis() as u64;
     client.color = color;
     Ok(())
 }
@@ -128,7 +128,7 @@ async fn create_name() -> Result<String, std::io::Error> {
 
 async fn delete_inactive_clients() {
     let mut state = GLOBAL_STATE.lock().unwrap();
-    let time_now = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time travel was invented").as_millis() as u64;
+    let time_now = SystemTime::now().duration_since(UNIX_EPOCH).expect("Could not determine time since UNIX_EPOCH").as_millis() as u64;
     state.clients.retain(|client| time_now - client.last_ping < TIMEOUT_MS);
 }
 
