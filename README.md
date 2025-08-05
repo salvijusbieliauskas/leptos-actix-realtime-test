@@ -57,15 +57,16 @@ cargo leptos build --release
 ## Project Structure
 
 - `src/` - Rust source code
-  - `main.rs` - Server entrypoint with Actix Web setup
-  - `app.rs` - Main Leptos application component
-  - `lib.rs` - Library configuration and exports
+    - `main.rs` - Server entrypoint with Actix Web setup
+    - `app.rs` - Main Leptos application component
+    - `lib.rs` - Library configuration and exports
 - `style/` - SCSS stylesheets
 - `assets/` - Static assets
 
 ## Configuration
 
 The project uses feature flags to enable different compilation modes:
+
 - `ssr` - Server-side rendering
 - `hydrate` - Client-side hydration
 - `csr` - Client-side rendering

@@ -1,5 +1,5 @@
-use leptos::prelude::ElementChild;
 use leptos::config::{get_configuration, LeptosOptions};
+use leptos::prelude::ElementChild;
 use leptos::prelude::{AutoReload, GlobalAttributes, HydrationScripts};
 use leptos_meta::MetaTags;
 
